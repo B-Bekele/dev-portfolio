@@ -44,10 +44,11 @@ a {
 }
 
 /* -------------------------------
-   Layout + Responsive Spacing Fixes
+   Layout + Responsive Spacing
 -------------------------------- */
 .section {
-  @apply relative z-10 flex items-center py-16 sm:py-20 md:py-24;
+  /* Mobile: flexible padding; Desktop: restore original min-height */
+  @apply relative z-10 flex items-center py-16 sm:py-20 md:min-h-[85vh];
 }
 
 .container {
@@ -150,7 +151,7 @@ img {
     @apply text-center;
   }
   .section {
-    @apply flex flex-col items-center py-14;
+    @apply flex flex-col items-center py-14 min-h-0;
   }
   .card {
     @apply p-5 text-center;
