@@ -9,25 +9,26 @@ export default function Projects() {
     >
       <div className="container">
         {/* Section Header */}
-        <h2 className="text-2xl md:text-3xl font-semibold mb-6">
+        <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-center md:text-left">
           Featured Projects
         </h2>
 
-        {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* Responsive Projects Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {projects.map((project) => (
             <article
               key={project.slug}
-              className="card glass aspect-[4/3] relative flex flex-col justify-between transition-transform hover:scale-[1.015]"
+              className="card glass relative flex flex-col justify-between overflow-hidden transition-transform hover:scale-[1.015] min-h-[320px] sm:min-h-[380px]"
             >
               {/* Project Info */}
-              <div>
+              <div className="flex flex-col gap-2">
                 <h3 className="text-xl font-semibold">{project.title}</h3>
-                <p className="mt-2 text-neutral-300 line-clamp-4">
+                <p className="text-neutral-300 text-sm sm:text-base line-clamp-4">
                   {project.summary}
                 </p>
 
-                <ul className="flex flex-wrap gap-2 mt-4">
+                {/* Tech Stack Pills */}
+                <ul className="flex flex-wrap gap-2 mt-2">
                   {project.stack.map((tech, index) => (
                     <li key={index} className="pill">
                       {tech}
@@ -36,11 +37,11 @@ export default function Projects() {
                 </ul>
               </div>
 
-              {/* View Details Button */}
-              <div className="absolute left-1/2 bottom-1/4 -translate-x-1/2 transform">
+              {/* View Details Button (centered) */}
+              <div className="flex justify-center mt-6 mb-2 sm:mb-4">
                 <Link
                   to={`/projects/${project.slug}`}
-                  className="btn btn-primary"
+                  className="btn btn-primary px-6 py-2 sm:px-8 sm:py-3"
                 >
                   View Details
                 </Link>

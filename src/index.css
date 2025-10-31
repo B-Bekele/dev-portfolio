@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 :root { --accent: #00E5FF; }
+
 html { scroll-behavior: smooth; }
-a { @apply underline decoration-neon/60 underline-offset-4 hover:decoration-neon; }
+
+a { 
+  @apply underline decoration-neon/60 underline-offset-4 hover:decoration-neon;
+}
 
 /* Subtle neon grid background + static shapes */
 .bg-grid::before {
@@ -14,7 +18,7 @@ a { @apply underline decoration-neon/60 underline-offset-4 hover:decoration-neon
   background-image:
     linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 50px 50px, 50px 50px;
+  background-size: 50px 50px;
   pointer-events: none;
   z-index: 0;
 }
@@ -30,36 +34,76 @@ a { @apply underline decoration-neon/60 underline-offset-4 hover:decoration-neon
   z-index: 0;
 }
 
+/* Gradient text for headings */
 .gradient-text {
   background: linear-gradient(90deg, #00E5FF, #6EE7B7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-          background-clip: text;
-          color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
-.section { @apply min-h-[65vh] md:min-h-[85vh] flex items-center relative z-10; } /* slightly tighter */
-.container { @apply max-w-6xl mx-auto px-4; }
+/* -------------------------------
+   Layout + Responsive Spacing Fixes
+-------------------------------- */
+.section {
+  @apply relative z-10 flex items-center py-16 sm:py-20 md:py-24;
+}
 
-.card { @apply bg-neutral-900/70 border border-neutral-800 rounded-2xl p-8 hover:border-neutral-700 transition; }
-.btn { @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-neutral-700; }
-.btn-primary { @apply bg-neutral-900 border-neon text-neon shadow-glow hover:bg-neutral-950; }
-.pill { @apply text-xs text-neutral-300 border border-neutral-700 rounded-lg px-2 py-1; }
+.container {
+  @apply w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8;
+}
 
-/* Animations */
+/* Cards */
+.card {
+  @apply bg-neutral-900/70 border border-neutral-800 rounded-2xl 
+  p-6 sm:p-8 hover:border-neutral-700 transition w-full;
+}
+
+/* Buttons */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 
+  rounded-xl bg-neutral-900 border border-neutral-800 
+  hover:border-neutral-700 text-center transition;
+}
+
+.btn-primary {
+  @apply bg-neutral-900 border-neon text-neon shadow-glow 
+  hover:bg-neutral-950;
+}
+
+.pill {
+  @apply text-xs sm:text-sm text-neutral-300 border border-neutral-700 
+  rounded-lg px-2 py-1;
+}
+
+/* Responsive image and text handling */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* -------------------------------
+   Animations
+-------------------------------- */
 .fade-in { animation: fadeIn 0.8s ease-out both; }
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
 .pulse-ring { animation: pulse 3s ease-in-out infinite; }
+
 @keyframes pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,255,0.25); }
   50% { box-shadow: 0 0 40px 8px rgba(0,229,255,0.25); }
 }
-/* -----------------------------------
+
+/* -------------------------------
    💎 Glassmorphism Effect
------------------------------------ */
+-------------------------------- */
 .glass {
   position: relative;
   background: rgba(0, 229, 255, 0.05);
@@ -90,12 +134,31 @@ a { @apply underline decoration-neon/60 underline-offset-4 hover:decoration-neon
   transition: 0.75s;
 }
 
-.glass:hover::after {
-  left: 130%;
-}
+.glass:hover::after { left: 130%; }
 
 .glass:hover {
   background: rgba(0, 229, 255, 0.12);
   box-shadow: 0 0 40px rgba(0, 229, 255, 0.2);
   transform: translateY(-2px);
+}
+
+/* -------------------------------
+   Mobile-specific layout polish
+-------------------------------- */
+@media (max-width: 640px) {
+  h1, h2, h3, h4 {
+    @apply text-center;
+  }
+  .section {
+    @apply flex flex-col items-center py-14;
+  }
+  .card {
+    @apply p-5 text-center;
+  }
+  .btn {
+    @apply w-full justify-center;
+  }
+  .container {
+    @apply px-4;
+  }
 }

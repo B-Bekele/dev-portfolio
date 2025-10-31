@@ -12,15 +12,22 @@ export default function App() {
   const [loaded, setLoaded] = useState(false);
   const location = useLocation();
 
-  // Only show intro when visiting home page for the first time
+  // Helper: check if an hour has passed since last intro
+  const shouldPlayIntro = () => {
+    const lastPlayed = localStorage.getItem("introLastPlayed");
+    if (!lastPlayed) return true; // never played before
+    const elapsed = Date.now() - parseInt(lastPlayed, 10);
+    return elapsed > 60 * 60 * 1000; // 1 hour in ms
+  };
+
   useEffect(() => {
-    if (location.pathname === "/" && !sessionStorage.getItem("introPlayed")) {
+    if (location.pathname === "/" && shouldPlayIntro()) {
       setShowIntro(true);
     }
   }, [location.pathname]);
 
   const handleFinishIntro = () => {
-    sessionStorage.setItem("introPlayed", "true");
+    localStorage.setItem("introLastPlayed", Date.now().toString());
     setLoaded(true);
     setTimeout(() => setShowIntro(false), 500); // hide loader after fade-out
   };

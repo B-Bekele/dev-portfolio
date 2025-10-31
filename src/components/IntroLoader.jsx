@@ -46,8 +46,8 @@ export default function IntroLoader({ onFinish }) {
       }
     } else {
       // Hold briefly after finishing before fading
-      const hold = setTimeout(() => setFadeOut(true), 1000);
-      const finish = setTimeout(() => onFinish(), 1600);
+      const hold = setTimeout(() => setFadeOut(true), 500);
+      const finish = setTimeout(() => onFinish(), 800);
       return () => {
         clearTimeout(hold);
         clearTimeout(finish);
