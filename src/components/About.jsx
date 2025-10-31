@@ -9,15 +9,23 @@ export default function About() {
           <p className="text-neutral-300 whitespace-pre-line">
             {SITE.aboutLong}
           </p>
-        <h3 className="text-xl font-semibold mt-8 mb-4">Core Skills</h3>
-        <ul className="flex flex-wrap gap-2 text-sm text-neutral-300">
-          <li className="pill">Python</li>
-          <li className="pill">SQL</li>
-          <li className="pill">Java</li>
-          <li className="pill">Pandas</li>
-          <li className="pill">NumPy</li>
-          <li className="pill">Data Visualization (Matplotlib, Plotly)</li>
-        </ul>
+
+          <h3 className="text-xl font-semibold mt-8 mb-4">Core Skills</h3>
+
+          {/* Core Skills */}
+          <ul className="flex flex-wrap gap-2 text-sm text-neutral-300 justify-start">
+            <li className="pill">Python</li>
+            <li className="pill">SQL</li>
+            <li className="pill">Java</li>
+            <li className="pill">Pandas</li>
+            <li className="pill">NumPy</li>
+
+            {/* Line break */}
+            <div className="basis-full h-0" />
+
+            <li className="pill">AI / Machine Learning (scikit-learn, TensorFlow, PyTorch)</li>
+            <li className="pill">Data Visualization (Matplotlib, Plotly)</li>
+          </ul>
         </div>
       </div>
     </section>
