@@ -13,7 +13,7 @@ export const projects = [
     slug: "resource-monitor",
     title: "Resource Monitor",
     summary: "Native desktop system monitor with real-time and historical performance tracking and automated alerts",
-    pageSummary: "System Resource Monitor is a native Python desktop application that visualizes CPU, memory, and disk usage in real time with PyQt6 and PyQtGraph. It logs performance data in SQLite for historical analysis and issues automated alerts when thresholds are exceeded, providing an all-in-one system performance dashboard.",
+    pageSummary: "A Native Python desktop application that visualizes CPU, memory, and disk usage in real time with PyQt6 and PyQtGraph. It logs performance data in SQLite for historical analysis and issues automated alerts when thresholds are exceeded, providing an all-in-one system performance dashboard.",
     pageSummary2: "Originally conceived as a Flask-based web app, the project evolved into a native desktop solution focused on performance, responsiveness, and tracking.",
     stack: ["Python", "SQLite", "PyQt6", "PyQtGraph", "psutil"],
     links: { demo: "", code: "https://github.com/B-Bekele/srmonitor" },
