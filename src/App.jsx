@@ -1,53 +1,46 @@
-import { useState, useEffect } from "react";
-import { useLocation, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import Home from "./pages/Home";
-import ProjectPage from "./pages/ProjectPage";
-import BackToTop from "./components/BackToTop";
-import IntroLoader from "./components/IntroLoader";
+import { useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import SkyStage from './components/SkyStage'
+import Grain from './components/Grain'
+import RailNav from './components/RailNav'
+import Home from './pages/Home'
+import ProjectPage from './pages/ProjectPage'
+import useScrollSky from './hooks/useScrollSky'
+
+// Scrolls to top (or to the #hash target) on route change
+function ScrollManager() {
+  const { pathname, hash } = useLocation()
+  useEffect(() => {
+    if (hash) {
+      const el = document.getElementById(hash.slice(1))
+      if (el) {
+        el.scrollIntoView()
+        return
+      }
+    }
+    window.scrollTo(0, 0)
+  }, [pathname, hash])
+  return null
+}
 
 export default function App() {
-  const [showIntro, setShowIntro] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const location = useLocation();
-
-  // Helper: check if an hour has passed since last intro
-  const shouldPlayIntro = () => {
-    const lastPlayed = localStorage.getItem("introLastPlayed");
-    if (!lastPlayed) return true; // never played before
-    const elapsed = Date.now() - parseInt(lastPlayed, 10);
-    return elapsed > 60 * 60 * 1000; // 1 hour in ms
-  };
-
-  useEffect(() => {
-    if (location.pathname === "/" && shouldPlayIntro()) {
-      setShowIntro(true);
-    }
-  }, [location.pathname]);
-
-  const handleFinishIntro = () => {
-    localStorage.setItem("introLastPlayed", Date.now().toString());
-    setLoaded(true);
-    setTimeout(() => setShowIntro(false), 500); // hide loader after fade-out
-  };
+  const { pathname } = useLocation()
+  // Project pages are short — pin the sky at mid-dusk instead of tracking scroll
+  useScrollSky(pathname.startsWith('/projects/') ? 0.45 : null)
 
   return (
     <>
-      {showIntro && <IntroLoader onFinish={handleFinishIntro} />}
-      <div
-        className={`min-h-screen bg-grid transition-opacity duration-1000 ${
-          showIntro && !loaded ? "opacity-0" : "opacity-100"
-        }`}
-      >
-        <Navbar />
+      <a href="#main" className="skip-link">Skip to content</a>
+      <SkyStage />
+      <Grain />
+      <ScrollManager />
+      <RailNav />
+      <main id="main" className="page">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects/:slug" element={<ProjectPage />} />
         </Routes>
-        <Footer />
-        <BackToTop />
-      </div>
+      </main>
     </>
-  );
+  )
 }

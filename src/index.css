@@ -2,164 +2,284 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { --accent: #00E5FF; }
-
-html { scroll-behavior: smooth; }
-
-a { 
-  @apply underline decoration-neon/60 underline-offset-4 hover:decoration-neon;
+/* ---------------------------------------------------------------------------
+   Last Light — design tokens
+   --sky drives the page-wide dusk→night transition (0 = dusk, 1 = night).
+   Written once per frame by useScrollSky(); everything below derives from it.
+--------------------------------------------------------------------------- */
+:root {
+  --sky: 0;
 }
 
-/* Subtle neon grid background + static shapes */
-.bg-grid::before {
-  content: "";
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #B69E83 transparent;
+  }
+  body { @apply bg-canvas text-ink font-sans antialiased; }
+  img { @apply block max-w-full h-auto; }
+  :focus-visible { @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-canvas rounded-md; }
+  ::selection { background: rgba(232, 160, 92, 0.35); color: #F6D8B8; }
+}
+
+@layer components {
+  /* Editorial 12-col grid wrapper: content sits right of the rail on desktop */
+  .page { @apply lg:pl-20; }
+  .ed-grid { @apply grid grid-cols-4 md:grid-cols-12 gap-x-4 md:gap-x-6 px-5 sm:px-8 md:px-12 max-w-[1400px]; }
+
+  .kicker {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    @apply text-xs sm:text-sm tracking-[0.35em] uppercase;
+  }
+
+  .section-number {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    @apply text-sm tracking-[0.35em] text-sunset-amber uppercase;
+  }
+
+  /* Sunset gradient: gold -> amber -> rose -> dusk blue; stops pass 3:1 large-text */
+  .gradient-text {
+    background: linear-gradient(100deg, #F6D8B8 0%, #E8A05C 40%, #D98E8E 68%, #8FB8DE 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Signature horizon rules */
+  .horizon-line {
+    @apply h-[2px] w-24 rounded-full;
+    background: linear-gradient(90deg, #E8A05C, #D98E8E, #8FB8DE);
+  }
+  .horizon-line-full {
+    @apply h-px w-full opacity-40;
+    background: linear-gradient(90deg, transparent, #E8A05C 20%, #D98E8E 50%, #8FB8DE 80%, transparent);
+  }
+  /* Cooled variant for the night zone — the sun has set */
+  .horizon-line-cool {
+    @apply h-px w-full opacity-30;
+    background: linear-gradient(90deg, transparent, #54402F 15%, #8FB8DE 55%, #A6C7E7 80%, transparent);
+  }
+
+  /* Gradient underline for the oversized contact email link */
+  .horizon-underline {
+    background-image: linear-gradient(90deg, #E8A05C, #D98E8E, #8FB8DE);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 2px;
+    transition: background-size 0.3s ease;
+    padding-bottom: 0.1em;
+  }
+  .horizon-underline:hover { background-size: 100% 4px; }
+
+  .link { @apply text-accent hover:text-accent-hover underline-offset-4 hover:underline; }
+}
+
+/* ---------------------------------------------------------------------------
+   Film grain — pushed further than v1 (0.045 → 0.07)
+--------------------------------------------------------------------------- */
+.grain {
   position: fixed;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
+  z-index: 60;
   pointer-events: none;
-  z-index: 0;
+  opacity: 0.07;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-.bg-grid::after {
-  content: "";
+
+/* ---------------------------------------------------------------------------
+   Sky stage — fixed page-wide backdrop, all layers derive from --sky.
+   Only transform/opacity change per frame; blurs are static.
+--------------------------------------------------------------------------- */
+.sky-stage {
   position: fixed;
   inset: 0;
-  background:
-    radial-gradient(12px 12px at 20% 30%, rgba(0,229,255,0.2), transparent 70%) no-repeat,
-    radial-gradient(8px 8px at 80% 70%, rgba(0,229,255,0.18), transparent 70%) no-repeat,
-    radial-gradient(10px 10px at 65% 20%, rgba(0,229,255,0.12), transparent 70%) no-repeat;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Gradient text for headings */
-.gradient-text {
-  background: linear-gradient(90deg, #00E5FF, #6EE7B7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-}
-
-/* -------------------------------
-   Layout + Responsive Spacing
--------------------------------- */
-.section {
-  /* Mobile: flexible padding; Desktop: restore original min-height */
-  @apply relative z-10 flex items-center py-16 sm:py-20 md:min-h-[85vh];
-}
-
-.container {
-  @apply w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8;
-}
-
-/* Cards */
-.card {
-  @apply bg-neutral-900/70 border border-neutral-800 rounded-2xl 
-  p-6 sm:p-8 hover:border-neutral-700 transition w-full;
-}
-
-/* Buttons */
-.btn {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 
-  rounded-xl bg-neutral-900 border border-neutral-800 
-  hover:border-neutral-700 text-center transition;
-}
-
-.btn-primary {
-  @apply bg-neutral-900 border-neon text-neon shadow-glow 
-  hover:bg-neutral-950;
-}
-
-.pill {
-  @apply text-xs sm:text-sm text-neutral-300 border border-neutral-700 
-  rounded-lg px-2 py-1;
-}
-
-/* Responsive image and text handling */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* -------------------------------
-   Animations
--------------------------------- */
-.fade-in { animation: fadeIn 0.8s ease-out both; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.pulse-ring { animation: pulse 3s ease-in-out infinite; }
-
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,255,0.25); }
-  50% { box-shadow: 0 0 40px 8px rgba(0,229,255,0.25); }
-}
-
-/* -------------------------------
-   💎 Glassmorphism Effect
--------------------------------- */
-.glass {
-  position: relative;
-  background: rgba(0, 229, 255, 0.05);
-  background-clip: padding-box;
-  backdrop-filter: blur(16px) saturate(120%);
-  -webkit-backdrop-filter: blur(16px) saturate(120%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 4px 30px rgba(0, 229, 255, 0.08);
+  z-index: -10;
   overflow: hidden;
-  transition: all 0.4s ease;
+  pointer-events: none;
 }
 
-/* Subtle diagonal shimmer effect */
-.glass::after {
-  content: "";
+.sky-dusk,
+.sky-night {
   position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.08) 50%,
-    transparent 100%
-  );
-  transform: skewX(-20deg);
-  transition: 0.75s;
+  inset: 0;
+}
+.sky-dusk {
+  background:
+    radial-gradient(110% 70% at 72% 30%, rgba(232, 160, 92, 0.18) 0%, transparent 55%),
+    radial-gradient(90% 60% at 20% 100%, rgba(143, 184, 222, 0.10) 0%, transparent 60%),
+    linear-gradient(180deg, #43301F 0%, #3A2A20 55%, #34241B 100%);
+  opacity: calc(1 - var(--sky));
+}
+.sky-night {
+  background:
+    radial-gradient(90% 55% at 30% 100%, rgba(143, 184, 222, 0.14) 0%, transparent 60%),
+    linear-gradient(180deg, #12151F 0%, #171B26 45%, #0E1118 100%);
+  opacity: var(--sky);
 }
 
-.glass:hover::after { left: 130%; }
-
-.glass:hover {
-  background: rgba(0, 229, 255, 0.12);
-  box-shadow: 0 0 40px rgba(0, 229, 255, 0.2);
-  transform: translateY(-2px);
+/* The sun: a crisp disc inside a soft halo; sinks 55vh and dims as --sky
+   rises; gone by ~87% */
+.sky-sun {
+  position: absolute;
+  top: 8vh;
+  right: 12vw;
+  width: 44vmin;
+  height: 44vmin;
+  transform: translate3d(0, calc(var(--sky) * 55vh), 0) scale(calc(1 - var(--sky) * 0.25));
+  opacity: calc(1 - var(--sky) * 1.15);
+  will-change: transform, opacity;
+}
+.sky-sun-halo {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(246, 216, 184, 0.55) 0%, rgba(232, 160, 92, 0.32) 40%, rgba(217, 142, 142, 0.16) 60%, transparent 72%);
+  filter: blur(28px);
+}
+.sky-sun-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 38%;
+  height: 38%;
+  margin: -19% 0 0 -19%;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #F6D8B8 0%, #F2C9A0 45%, rgba(232, 160, 92, 0.95) 66%, rgba(232, 160, 92, 0) 71%);
+  filter: blur(1.5px);
 }
 
-/* -------------------------------
-   Mobile-specific layout polish
--------------------------------- */
-@media (max-width: 640px) {
-  h1, h2, h3, h4 {
-    @apply text-center;
-  }
-  .section {
-    @apply flex flex-col items-center py-14 min-h-0;
-  }
-  .card {
-    @apply p-5 text-center;
-  }
-  .btn {
-    @apply w-full justify-center;
-  }
-  .container {
-    @apply px-4;
+/* The moon: rises from below the bottom-right corner over the last stretch
+   of scroll and settles into place at the very bottom of the page.
+   --moon remaps --sky 0.78→1 onto 0→1. */
+.sky-moon {
+  position: absolute;
+  bottom: 9vh;
+  right: 7vw;
+  width: 15vmin;
+  height: 15vmin;
+  --moon: clamp(0, calc((var(--sky) - 0.78) * 4.55), 1);
+  transform: translate3d(0, calc((1 - var(--moon)) * 45vh), 0);
+  opacity: var(--moon);
+  will-change: transform, opacity;
+}
+.sky-moon-glow {
+  position: absolute;
+  inset: -45%;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(143, 184, 222, 0.30) 0%, rgba(143, 184, 222, 0.12) 50%, transparent 70%);
+  filter: blur(12px);
+}
+/* Waxing crescent: a mask cuts a bite from the upper-left of the disc */
+.sky-moon-disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 60% 60%, #F6EFE2 0%, #E4E3DC 45%, #C9CEDA 78%, #B4BFD4 100%);
+  -webkit-mask-image: radial-gradient(circle at 32% 32%, transparent 52%, #000 55%);
+  mask-image: radial-gradient(circle at 32% 32%, transparent 52%, #000 55%);
+}
+
+/* Hazy horizon band inside the sky, at the sun's landing line — atmosphere,
+   not a UI rule */
+.sky-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 75.5vh;
+  height: 10px;
+  background:
+    linear-gradient(180deg, transparent, rgba(232, 160, 92, 0.9) 40%, rgba(217, 142, 142, 0.7) 60%, transparent),
+    linear-gradient(90deg, transparent, #E8A05C 25%, #D98E8E 55%, #8FB8DE 85%, transparent);
+  filter: blur(6px);
+  opacity: calc((1 - var(--sky)) * 0.3);
+}
+
+/* Warm band at the horizon that peaks mid-scroll, then fades into night */
+.sky-afterglow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 68vh;
+  height: 14vh;
+  background: linear-gradient(180deg, transparent, rgba(232, 160, 92, 0.22) 45%, rgba(217, 142, 142, 0.12) 70%, transparent);
+  filter: blur(12px);
+  opacity: calc(var(--sky) * (1 - var(--sky)) * 2.6);
+}
+
+/* Stars fade in over the last half of scroll (opacity clamps to [0,1]) */
+.sky-stars {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg fill='%23F3E7D3'%3E%3Ccircle cx='23' cy='41' r='1.1'/%3E%3Ccircle cx='84' cy='17' r='0.8'/%3E%3Ccircle cx='141' cy='63' r='1.3'/%3E%3Ccircle cx='199' cy='29' r='0.9'/%3E%3Ccircle cx='57' cy='102' r='0.9'/%3E%3Ccircle cx='120' cy='131' r='0.7'/%3E%3Ccircle cx='176' cy='108' r='1.1'/%3E%3Ccircle cx='222' cy='151' r='0.8'/%3E%3Ccircle cx='34' cy='167' r='1.2'/%3E%3Ccircle cx='96' cy='196' r='0.8'/%3E%3Ccircle cx='158' cy='178' r='1.0'/%3E%3Ccircle cx='207' cy='214' r='0.7'/%3E%3Ccircle cx='12' cy='222' r='0.9'/%3E%3Ccircle cx='68' cy='58' r='0.7'/%3E%3Ccircle cx='185' cy='84' r='0.7'/%3E%3Ccircle cx='108' cy='80' r='0.6'/%3E%3Ccircle cx='45' cy='135' r='0.6'/%3E%3Ccircle cx='230' cy='95' r='0.7'/%3E%3Ccircle cx='135' cy='225' r='0.8'/%3E%3Ccircle cx='75' cy='240' r='0.6'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  opacity: calc((var(--sky) - 0.5) * 2.2);
+}
+
+/* ---------------------------------------------------------------------------
+   Editorial ornaments
+--------------------------------------------------------------------------- */
+.ghost-numeral {
+  font-family: Fraunces, Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(10rem, 26vw, 24rem);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(243, 231, 211, 0.07);
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* Warm blur behind the hero byline portrait */
+.sun-glow {
+  background: radial-gradient(circle, rgba(246, 216, 184, 0.55) 0%, rgba(232, 160, 92, 0.35) 40%, rgba(217, 142, 142, 0.15) 62%, transparent 75%);
+  filter: blur(32px);
+}
+
+/* Site-owned scrollbar in the sunset palette (WebKit/Chromium) */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #E8A05C, #D98E8E, #8FB8DE);
+  border-radius: 9999px;
+  border: 2px solid rgba(43, 29, 20, 0.6);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #F2C9A0, #E8A05C, #A6C7E7);
+}
+
+/* Skip link — first focusable, horizon-styled */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;
+  background: #2B1D14;
+  color: #F3E7D3;
+  border: 1px solid #E8A05C;
+  transition: top 0.2s ease;
+}
+.skip-link:focus-visible { top: 1rem; }
+
+/* Scroll reveal (paired with useReveal hook) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  :root { --sky: 0.25; } /* pinned pleasant dusk; useScrollSky also no-ops */
+  .sky-stars { opacity: 0; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

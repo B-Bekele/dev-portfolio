@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E8A05C"/>
+      <stop offset="45%" stop-color="#D98E8E"/>
+      <stop offset="65%" stop-color="#3A2A20"/>
+      <stop offset="100%" stop-color="#2B1D14"/>
+    </linearGradient>
+    <linearGradient id="horizon" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E8A05C"/>
+      <stop offset="50%" stop-color="#D98E8E"/>
+      <stop offset="100%" stop-color="#8FB8DE"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#sky)"/>
+  <rect x="8" y="41" width="48" height="1.5" rx="0.75" fill="url(#horizon)" opacity="0.9"/>
+  <text x="32" y="34" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="24" font-weight="600" fill="#F3E7D3">BB</text>
+</svg>
