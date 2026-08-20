@@ -2,14 +2,12 @@ import { SITE } from '../data/site'
 import SectionLabel from './SectionLabel'
 import useReveal from '../hooks/useReveal'
 
-const SKILLS = [
-  'Python',
-  'SQL',
-  'Java',
-  'Pandas',
-  'NumPy',
-  'AI / Machine Learning (scikit-learn, TensorFlow, PyTorch)',
-  'Data Visualization (Matplotlib, Plotly)',
+const SKILL_GROUPS = [
+  { label: 'Languages', items: ['Python', 'C/C++', 'SQL', 'Java'] },
+  { label: 'Data & ML', items: ['Pandas', 'scikit-learn', 'XGBoost', 'PyTorch'] },
+  // NBSP inside the parenthetical keeps "(AWS, GCP)" intact when the narrow
+  // sidebar wraps it at the lg breakpoint; the break lands after "Deployment".
+  { label: 'Backend & Infra', items: ['REST APIs', 'PostgreSQL', 'Docker', 'Cloud Deployment (AWS, GCP)', 'CI/CD'] },
 ]
 
 export default function About() {
@@ -39,20 +37,25 @@ export default function About() {
           {rest}
         </p>
 
-        {/* Skills as marginalia */}
+        {/* Skills as marginalia, grouped by discipline */}
         <aside className="col-span-4 md:col-start-10 md:col-span-3 mt-12 md:mt-0 md:row-start-2 md:row-span-2">
           <h3 className="kicker text-ink-muted mb-6">Core Skills</h3>
-          <ul className="space-y-4">
-            {SKILLS.map((skill, i) => (
-              <li key={skill} className="flex items-baseline gap-3">
-                <span className="font-mono text-xs text-sunset-amber shrink-0">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <span className="horizon-line !w-3 !h-px shrink-0 translate-y-[-3px]" aria-hidden="true" />
-                <span className="text-sm text-ink-soft leading-snug">{skill}</span>
-              </li>
+          <div className="space-y-6">
+            {SKILL_GROUPS.map((group) => (
+              <div key={group.label}>
+                <h4 className="font-mono text-[10px] tracking-[0.3em] uppercase text-sunset-amber">
+                  {group.label}
+                </h4>
+                <ul className="mt-2 space-y-1">
+                  {group.items.map((item) => (
+                    <li key={item} className="text-sm text-ink-soft leading-snug">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
         </aside>
       </div>
     </section>

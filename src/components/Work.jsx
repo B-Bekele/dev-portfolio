@@ -10,8 +10,8 @@ export default function Work() {
       aria-labelledby="work-label"
       className="relative overflow-x-clip py-28 md:py-40"
     >
-      {/* Ghost numeral bleeding off the right edge this time */}
-      <span className="ghost-numeral top-8 -right-10 md:-right-16" aria-hidden="true">
+      {/* Giant ghost numeral bleeding off the left edge */}
+      <span className="ghost-numeral top-8 -left-10 md:-left-16" aria-hidden="true">
         02
       </span>
 

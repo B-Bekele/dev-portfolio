@@ -5,6 +5,7 @@ import Grain from './components/Grain'
 import RailNav from './components/RailNav'
 import Home from './pages/Home'
 import ProjectPage from './pages/ProjectPage'
+import NotFound from './pages/NotFound'
 import useScrollSky from './hooks/useScrollSky'
 
 // Scrolls to top (or to the #hash target) on route change
@@ -39,6 +40,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects/:slug" element={<ProjectPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
     </>

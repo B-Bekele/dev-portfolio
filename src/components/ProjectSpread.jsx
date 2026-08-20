@@ -23,7 +23,7 @@ export default function ProjectSpread({ project, index, flip = false }) {
       </p>
       <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-base">
         <Link to={`/projects/${project.slug}`} className="link font-medium">
-          Case study →
+          More info →
         </Link>
         {project.links.demo && (
           <a href={project.links.demo} target="_blank" rel="noopener noreferrer" className="link font-medium">
@@ -43,7 +43,7 @@ export default function ProjectSpread({ project, index, flip = false }) {
     <div className={`col-span-4 md:col-span-6 ${flip ? 'md:col-start-1' : 'md:col-start-7'} relative mt-10 md:mt-0`}>
       <Link
         to={`/projects/${project.slug}`}
-        aria-label={`${project.title} — case study`}
+        aria-label={`${project.title} — more info`}
         className={`block relative transition-transform duration-300 hover:-translate-y-1 ${
           flip ? 'md:-ml-8 lg:-ml-12' : 'md:-mr-8 lg:-mr-12'
         }`}

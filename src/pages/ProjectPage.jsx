@@ -1,27 +1,24 @@
 import { Link, useParams } from 'react-router-dom'
 import { projects } from '../data/projects'
+import { SITE } from '../data/site'
+import usePageMeta from '../hooks/usePageMeta'
+import NotFound from './NotFound'
 
 export default function ProjectPage() {
   const { slug } = useParams()
   const index = projects.findIndex((p) => p.slug === slug)
   const project = projects[index]
 
-  if (!project) {
-    return (
-      <section className="ed-grid min-h-[70svh] pt-32 md:pt-40">
-        <div className="col-span-4 md:col-start-2 md:col-span-8">
-          <p className="section-number">404</p>
-          <h1 className="font-display font-semibold text-4xl md:text-5xl text-ink mt-4">
-            Project not found
-          </h1>
-          <div className="horizon-line mt-6" aria-hidden="true" />
-          <p className="mt-8">
-            <Link to="/#work" className="link font-medium">← Selected Work</Link>
-          </p>
-        </div>
-      </section>
-    )
-  }
+  if (!project) return <NotFound />
+
+  return <ProjectDetail project={project} index={index} />
+}
+
+function ProjectDetail({ project, index }) {
+  usePageMeta({
+    title: `${project.title} — ${SITE.name}`,
+    canonicalPath: `/projects/${project.slug}`,
+  })
 
   const num = String(index + 1).padStart(2, '0')
 

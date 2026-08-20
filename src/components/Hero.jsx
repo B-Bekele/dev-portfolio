@@ -30,7 +30,7 @@ export default function Hero() {
           <h1 className="mt-8">
             <span className="block font-display italic font-medium text-ink-soft text-3xl md:text-4xl mb-3">
               Hi, I'm
-            </span>
+            </span>{' '}
             <span
               className="block font-display font-semibold text-ink leading-[1.02] whitespace-nowrap"
               style={{ fontSize: 'clamp(2.5rem, 6.5vw, 5.5rem)' }}
