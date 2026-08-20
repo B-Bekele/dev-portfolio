@@ -18,6 +18,12 @@ export const IMAGES = {
     srcset:
       '/assets/screenshots/itch1-900.webp 900w, /assets/screenshots/itch1-1800.webp 1800w',
   },
+  // Vector, so it needs no width variants — the entry exists purely to give
+  // the browser a ratio to reserve space with.
+  '/assets/screenshots/itch2-architecture.svg': {
+    width: 1200,
+    height: 772,
+  },
   '/assets/screenshots/risk1-1800.webp': {
     width: 1983,
     height: 1168,

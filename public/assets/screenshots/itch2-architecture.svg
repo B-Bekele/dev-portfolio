@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 772" width="1200" height="772" role="img" aria-labelledby="t">
+  <title id="t">ITCH 5.0 parse pipeline: session file to 1 MB buffer to jump-table dispatch to packed struct, feeding an order lifecycle set</title>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#E8A05C" fill-opacity="0.75"/>
+    </marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8FB8DE" fill-opacity="0.75"/>
+    </marker>
+    <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#E8A05C"/>
+      <stop offset="0.5" stop-color="#D98E8E"/>
+      <stop offset="1" stop-color="#8FB8DE"/>
+    </linearGradient>
+  </defs>
+
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .h  { font-size: 23px; fill: #E8A05C; letter-spacing: 2.5px; }
+    .hb { font-size: 23px; fill: #8FB8DE; letter-spacing: 2.5px; }
+    .s  { font-size: 18px; fill: #C7BBAA; }
+    .n  { font-size: 16px; fill: #8B8073; }
+    .big{ font-size: 30px; fill: #F6D8B8; }
+    .cap{ font-size: 15px; fill: #8B8073; letter-spacing: 3px; }
+  </style>
+
+  <rect width="1200" height="772" fill="#0E1117"/>
+
+  <text class="cap" x="60" y="56">ITCH 5.0 PARSE PIPELINE</text>
+  <rect x="60" y="70" width="150" height="2" fill="url(#rule)"/>
+
+  <!-- Stage boxes -->
+  <g fill="#161A23" stroke="#E8A05C" stroke-opacity="0.32" rx="8">
+    <rect x="60"  y="110" width="240" height="160" rx="8"/>
+    <rect x="340" y="110" width="240" height="160" rx="8"/>
+    <rect x="620" y="110" width="240" height="160" rx="8"/>
+    <rect x="900" y="110" width="240" height="160" rx="8"/>
+  </g>
+
+  <g text-anchor="middle">
+    <text class="h" x="180"  y="172">SESSION FILE</text>
+    <text class="s" x="180"  y="212">7.9 GB, big-endian</text>
+
+    <text class="h" x="460"  y="172">1 MB BUFFER</text>
+    <text class="s" x="460"  y="212">fread + memmove</text>
+
+    <text class="h" x="740"  y="172">DISPATCH</text>
+    <text class="s" x="740"  y="212">jump table, 22 types</text>
+
+    <text class="h" x="1020" y="172">PACKED STRUCT</text>
+    <text class="s" x="1020" y="212">zero-copy cast</text>
+  </g>
+
+  <!-- Flow arrows -->
+  <g stroke="#E8A05C" stroke-opacity="0.75" stroke-width="2" marker-end="url(#a)">
+    <line x1="302" y1="190" x2="336" y2="190"/>
+    <line x1="582" y1="190" x2="616" y2="190"/>
+    <line x1="862" y1="190" x2="896" y2="190"/>
+  </g>
+
+  <!-- Boundary note under the buffer stage -->
+  <text class="n" x="460" y="312" text-anchor="middle">a message split across two reads is</text>
+  <text class="n" x="460" y="338" text-anchor="middle">carried into the next block</text>
+
+  <!-- Struct feeds the order state -->
+  <line x1="1020" y1="272" x2="1020" y2="386" stroke="#8FB8DE" stroke-opacity="0.75" stroke-width="2" marker-end="url(#ab)"/>
+
+  <rect x="620" y="390" width="520" height="170" rx="8" fill="#161A23" stroke="#8FB8DE" stroke-opacity="0.32"/>
+  <g text-anchor="middle">
+    <text class="hb" x="880" y="434">ORDER LIFECYCLE SET</text>
+    <text class="n"  x="880" y="466">unordered_set&lt;uint64_t&gt;</text>
+    <text class="s"  x="880" y="504">add / replace  →  insert</text>
+    <text class="s"  x="880" y="534">execute / cancel / delete  →  must exist</text>
+  </g>
+
+  <!-- Result bar -->
+  <rect x="60" y="620" width="1080" height="92" rx="8" fill="#12161F" stroke="#E8A05C" stroke-opacity="0.2"/>
+  <text class="cap" x="600" y="652" text-anchor="middle">ONE SESSION · 12/30/2019</text>
+  <text class="big" x="600" y="692" text-anchor="middle">268,744,780 msgs · 4.02M/sec · 0 orphaned</text>
+</svg>

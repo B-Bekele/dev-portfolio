@@ -17,6 +17,9 @@ export default function Home() {
       <Work />
       <HorizonDivider cool />
       <Contact />
+      {/* Closing rule — punctuation rather than a footer, so the page ends
+          deliberately instead of just running out. */}
+      <HorizonDivider cool className="pb-28 md:pb-40" />
     </>
   )
 }
