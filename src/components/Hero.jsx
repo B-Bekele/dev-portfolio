@@ -1,5 +1,9 @@
 import { SITE } from '../data/site'
-import profile from '../assets/profile.jpg'
+// Square WebP crops. Imported rather than looked up in the image manifest
+// because Vite fingerprints anything under src/assets, so these have no
+// stable URL to key on.
+import profile288 from '../assets/profile-288.webp'
+import profile576 from '../assets/profile-576.webp'
 
 export default function Hero() {
   return (
@@ -13,10 +17,13 @@ export default function Hero() {
           <div className="relative w-40 sm:w-52 md:w-72">
             <div className="absolute -inset-10 sun-glow rounded-full" aria-hidden="true" />
             <img
-              src={profile}
+              src={profile576}
+              srcSet={`${profile288} 288w, ${profile576} 576w`}
+              sizes="(min-width: 768px) 288px, (min-width: 640px) 208px, 160px"
               alt="Bamlak Bekele"
               width="288"
               height="288"
+              decoding="async"
               className="relative w-full aspect-square object-cover -rotate-2 border-2 border-sunset-gold/40 shadow-lift"
             />
           </div>

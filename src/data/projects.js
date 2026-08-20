@@ -7,7 +7,7 @@ export const projects = [
     pageSummary2: "What began as a small project to learn about financial analytics and markets evolved into a full-stack, data-driven analytics suite that integrates robust data ingestion, structured analytics, and interactive visualization.",
     stack: ["Python", "Pandas", "SQLAlchemy", "Streamlit", "Plotly", "yfinance"],
     links: { demo: "https://portview.streamlit.app/", code: "https://github.com/B-Bekele/portview" },
-    screenshots: ["/assets/screenshots/risk1.png", "/assets/screenshots/risk2.png"]
+    screenshots: ["/assets/screenshots/risk1-1800.webp", "/assets/screenshots/risk2-1800.webp"]
   },
   {
     slug: "resource-monitor",
@@ -17,6 +17,6 @@ export const projects = [
     pageSummary2: "Originally conceived as a Flask-based web app, the project evolved into a native desktop solution focused on performance, responsiveness, and tracking.",
     stack: ["Python", "SQLite", "PyQt6", "PyQtGraph", "psutil"],
     links: { demo: "", code: "https://github.com/B-Bekele/srmonitor" },
-    screenshots: ["/assets/screenshots/mon1.png", "/assets/screenshots/mon2.png"]
+    screenshots: ["/assets/screenshots/mon1-1770.webp", "/assets/screenshots/mon2-1761.webp"]
   }
 ]

@@ -1,15 +1,22 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { projects } from '../data/projects'
 import { SITE } from '../data/site'
 import usePageMeta from '../hooks/usePageMeta'
+import ResponsiveImage from '../components/ResponsiveImage'
 import NotFound from './NotFound'
 
 export default function ProjectPage() {
   const { slug } = useParams()
-  const index = projects.findIndex((p) => p.slug === slug)
+  // Slugs match case-insensitively so a link that gets upper- or mixed-cased in
+  // transit still resolves; any spelling but the canonical one redirects to it,
+  // leaving exactly one indexable URL per project.
+  const index = projects.findIndex(
+    (p) => p.slug.toLowerCase() === (slug ?? '').toLowerCase()
+  )
   const project = projects[index]
 
   if (!project) return <NotFound />
+  if (project.slug !== slug) return <Navigate to={`/projects/${project.slug}`} replace />
 
   return <ProjectDetail project={project} index={index} />
 }
@@ -70,11 +77,10 @@ function ProjectDetail({ project, index }) {
             key={src}
             className={`col-span-4 md:col-span-9 ${i % 2 === 0 ? 'md:col-start-2 md:rotate-[0.5deg]' : 'md:col-start-3 md:-rotate-[0.5deg]'}`}
           >
-            <img
+            <ResponsiveImage
               src={src}
               alt={`${project.title} screenshot ${i + 1}`}
-              loading="lazy"
-              decoding="async"
+              sizes="(min-width: 768px) 72vw, 100vw"
               className="w-full border border-ink/10 shadow-lift rounded-lg"
             />
             <figcaption className="font-mono text-[10px] tracking-[0.3em] uppercase text-ink-muted mt-4">

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import useReveal from '../hooks/useReveal'
+import ResponsiveImage from './ResponsiveImage'
 
 // One full-width editorial project spread. flip=false: text left / images
 // bleeding off the right edge. flip=true: mirrored.
@@ -48,18 +49,16 @@ export default function ProjectSpread({ project, index, flip = false }) {
           flip ? 'md:-ml-8 lg:-ml-12' : 'md:-mr-8 lg:-mr-12'
         }`}
       >
-        <img
+        <ResponsiveImage
           src={project.screenshots[0]}
           alt={`${project.title} screenshot 1`}
-          loading="lazy"
-          decoding="async"
+          sizes="(min-width: 768px) 45vw, 92vw"
           className={`w-[92%] ${flip ? 'mr-auto -rotate-1' : 'ml-auto rotate-1'} border border-ink/10 shadow-lift rounded-lg`}
         />
-        <img
+        <ResponsiveImage
           src={project.screenshots[1]}
           alt={`${project.title} screenshot 2`}
-          loading="lazy"
-          decoding="async"
+          sizes="(min-width: 768px) 28vw, 58vw"
           className={`absolute w-[58%] -bottom-6 ${
             flip ? '-right-2 rotate-[1.5deg]' : '-left-2 -rotate-[1.5deg]'
           } border border-ink/10 shadow-lift rounded-lg`}
